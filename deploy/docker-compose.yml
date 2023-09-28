@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  migrate:
+    build: .
+    container_name: 'migrate'
+    command: >
+      cmd /D "python manage.py makemigrations --no-input -v 3
+      && python manage.py migrate --no-input -v 3
+      && python manage.py createsuperuser --noinput; exit 0"
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_PASSWORD=adminn
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+    volumes:
+      - .:/app
+
+  gunicorn:
+    image: api_migrate
+    container_name: 'Backapi'
+    restart: always
+    command: /bin/sh -c "python -m gunicorn -b 0.0.0.0:80 hh.wsgi --reload"
+    volumes:
+      - .:/app
+    ports:
+      - "0.0.0.0:8000:8000"
+    depends_on:
+      - migrate

@@ -1,0 +1,399 @@
+{
+	"info": {
+		"_postman_id": "efc63c67-52eb-4622-ae23-b6c90590a430",
+		"name": "BackEnd Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29905793"
+	},
+	"item": [
+		{
+			"name": "Функционал клиента",
+			"item": [
+				{
+					"name": "Добавление товара в корзину",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token cce211d567002aa322b50695b2aff6bc4c7dd799",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/cart/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"cart",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр корзины",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр списка товаров",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление товара из корзины",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Выход(доделать)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Оформление заказа",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр заказов",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token b00d36b4f40ddc4cd9306f7a43f7916ca3df9a68",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/order/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"order",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Клиент имеет следующие функции:\n\n- Просмотр товаров\n- Добавление товара в корзину\n- Просмотр корзины\n- Удаление товара из корзины\n- Оформление заказа\n- Просмотр заказов\n- Выход\n    \n\n## Важное примечание:\n\n**Регистрация и аутентификация пользователей реализованы с использованием Токен-системы. В каждом из последующих запросов (кроме просмотра списка товаров) должен быть указан заголовок Authorization с соответствующим значением токена клиента:**\n\n<img src=\"https://content.pstmn.io/dac428ad-b8ba-43b5-8a22-e51552d1abc8/aW1hZ2UucG5n\" alt=\"Необходимый%20заголовок%20запросов%20для%20функционала%20клиента%20(указание%20токена%20клиента)\" width=\"981\" height=\"100\">\n\n# Включает в себя следующие эндпоинты:\n\n## Product:\n\nСтандартный URL: GET product/\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| GET | \\- | HTTP_200_OK  <br>•‎ {{ Product.id }}  <br>•‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }} |\n\n### Пояснение:\n\n#### Просмотр товаров (GET):\n\nПри вводе соответствующего адреса с использованием метода GET мы можем получить информацию о текущих товарах:\n\n``` json\n[\n    {\n        \"id\": 1,\n        \"name\": \"Product1\",\n        \"description\": \"ProductDesc1\",\n        \"price\": 125\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Product2\",\n        \"description\": \"ProductDesc2\",\n        \"price\": 150\n    },\n\n ```\n\n## Cart:\n\nСтандартный URL: GET cart/\n\nURL для добавления товара в корзину: cart/product_id\n\nURL для удаления товара из корзины: cart_remove/product_id\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| POST | \\- | HTTP_200_OK  <br>•‎ \"message\": \"Product added to cart\"  <br>HTTP_404_NOT_FOUND  <br>•‎ \"detail\": \"Страница не найдена\"  <br>HTTP_403_FORBIDDEN  <br>•‎ \"detail\": \"Access Forbidden\" |\n| GET | \\- | HTTP_200_OK  <br>•‎ {{ CartProducts.id }}  <br>•‎ {{ Product.id }}  <br>•‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }}  <br>HTTP_403_FORBIDDEN  <br>•‎ \"detail\": \"Access Forbidden\" |\n| DELETE | \\- | HTTP_200_OK  <br>•‎ \"message\": \"Product removed from cart\"  <br>HTTP_404_NOT_FOUND  <br>•‎ \"detail\": \"Страница не найдена\"  <br>HTTP_403_FORBIDDEN  <br>•‎ \"detail\": \"Access Forbidden\" |\n\n### Пояснение:\n\n#### Добавление товара в корзину (POST):\n\nПри вводе соответствующего идентификатора товара клиент сможет добавить его в корзину.\n\n``` json\n{\n    \"message\": \"Product added to cart\"\n}\n\n ```\n\nЕсли же у него не введен токен - ему будет отказано в доступе.\n\n``` json\n{\n    \"detail\": \"Access Forbidden\"\n}\n\n ```\n\nПри вводе несуществующего идентификатора товара ему будет возвращен статус 404 с соответствующим сообщением:\n\n``` json\n{\n    \"detail\": \"Страница не найдена.\"\n}\n\n ```\n\n#### Просмотр корзины (GET):\n\nПри вводе адреса с методом GET пользователь сможет увидеть список товаров, которые он добавил в корзину:\n\n``` json\n[\n    {\n        \"id\": 9,\n        \"product_id\": 1,\n        \"name\": \"Product1\",\n        \"description\": \"ProductDesc1\",\n        \"price\": 125\n    },\n    {\n        \"id\": 10,\n        \"product_id\": 1,\n        \"name\": \"Product1\",\n        \"description\": \"ProductDesc1\",\n        \"price\": 125\n    }\n]\n\n ```\n\nЕсли же у пользователя не введен его токен, соответственно доступ он получить не сможет:\n\n``` json\n{\n    \"detail\": \"Access Forbidden\"\n}\n\n ```\n\n#### Удаление товара из корзины (DELETE):\n\nПри вводе соответствующего идентификатора товара в корзине (id) пользователь может удалить его:\n\n``` json\n{\n    \"message\": \"Item removed from cart\"\n}\n\n ```\n\nАналогично с добавлением товара, при отсутствии токена его будет ожидать ошибка:\n\n``` json\n{\n    \"detail\": \"Access Forbidden\"\n}\n\n ```\n\nИ также при попытке удалить товар с некорректным идентификатором:\n\n``` json\n{\n    \"detail\": \"Страница не найдена.\"\n}\n\n ```\n\n## Order:\n\nСтандартный URL: order/\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| POST | \\- | HTTP_STATUS_201_CREATED  <br>• {{ Order.order_id }}  <br>• \"message\" : \"Order is processed\"  <br>HTTP_STATUS_403_FORBIDDEN  <br>• \"detail\" : \"Access Forbidden\"  <br>HTTP_STATUS_422_UNPROCESSABLE_ENTITY  <br>• \"message\" : \"Cart is empty\" |\n| GET |  | HTTP_STATUS_200_OK  <br>• {{ Order.id }}  <br>• {{ Order.products\\[...\\] }}  <br>• {{ Order.order_price }}  <br>HTTP_STATUS_403_FORBIDDEN  <br>• \"detail\" : \"Access Forbidden\" |\n\n### Пояснение:\n\n#### Оформление заказа (POST):\n\nПри переходе по адресу с методом POST будет оформлен заказ для пользователя, который основывается на текущих товарах в его корзине. В результате чего будет возвращено сообщение об успешном оформлении заказа и его идентификатор:\n\n``` json\n{  \n\"order_id\": 4,  \n\"message\": \"Order is processed\"  \n}\n\n ```\n\nВ случае, если у пользователя отсутствует токен, доступ ему будет запрещен:\n\n``` json\n{\n    \"detail\": \"Access Forbidden\"\n}\n\n ```\n\nЕсли же при оформлении заказа у пользователя будут отсутствовать товары в корзине, ему будет возвращено об этом соответствующее сообщение:\n\n``` json\n{\n    \"message\": \"Cart is empty\"\n}\n\n ```\n\n#### Просмотр оформленных заказов (GET):\n\nЕсли же по тому же адресу пользователь использует метод GET, то ему будет возвращена информация о его заказах:\n\n``` json\n[\n    {\n        \"id\": 3,\n        \"products\": [\n            1,\n            1,\n            2,\n            3\n        ],\n        \"order_price\": 550\n    }\n]\n\n ```\n\nИ соответственно при отсутствии токена пользователь не сможет просмотреть свои заказы:\n\n``` json\n{\n    \"detail\": \"Access Forbidden\"\n}\n\n ```\n\n## Logout:\n\nСтандартный URL для выхода: logout/\n\n| **Метод** | **Запрос** | Ответ |\n| --- | --- | --- |\n| GET | \\- | HTTP_200_OK  <br>•‎ \"message\" : \"logout\"  <br>HTTP_401_UNAUTHORIZED  <br>•‎ \"detail\" : \"Недопустимый токен\" |\n\n#### Выход клиента (GET):\n\nПо аналогии с администратором, после перехода по адресу будет произведен выход клиента и сброс его токена-аутентификации.\n\n``` json\n{\n    \"message\": \"logout\"\n}\n\n ```\n\n### Примечание:\n\nПри попытке использования функции клиента без использования соответствующего токена будет выведена ошибка о неподходящем токене:\n\n``` json\n{\n    \"detail\": \"Недопустимый токен.\"\n}\n\n ```"
+		},
+		{
+			"name": "Функционал администратора",
+			"item": [
+				{
+					"name": "Добавление товара",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token b330c653135efc85001b5fd45952c6774fe60963",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Product3",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ProductDesc3",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "200",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/product",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Редактирование товара",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token b330c653135efc85001b5fd45952c6774fe60963",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Product3Updated",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/product/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"product",
+								"3"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Product3Updated",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление товара",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token b330c653135efc85001b5fd45952c6774fe60963",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/product/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"product",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Выход(доделать)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token a00a671e608b4ac0c0c93a44ecf185a7b17aaaf0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/logout",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр списка товаров",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"description": "Администратор может выполнять следующие функции:\n\n- Просмотр товаров\n- Добавление товара\n- Редактирование товара\n- Удаление товара\n- Выход\n    \n\n## Важное примечание:\n\n**Регистрация и аутентификация пользователей реализованы с использованием Токен-системы. В каждом из последующих запросов должен быть указан заголовок Authorization с соответствующим значением токена администратора:**\n\n<img src=\"https://content.pstmn.io/4ece4852-0f6c-4b8a-b9b3-818e3e71eedc/aW1hZ2UucG5n\" alt=\"Необходимый%20заголовок%20запросов%20для%20функционала%20администратора%20(указание%20токена%20администратора)\" width=\"1467\" height=\"85\">\n\n# Включает в себя следующие эндпоинты:\n\n## Product:\n\nСтандартный URL: GET product/\n\nURL для изменения и удаления: DELETE, PATCH product/product_id\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| GET | \\- | HTTP_200_OK  <br>•‎ {{ Product.id }}  <br>•‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }} |\n| POST | •‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }} | HTTP_201_CREATED  <br>•‎ {{ Product.id }}  <br>•‎ \"message\" : \"Product added\"  <br>HTTP_422_UNPROCESSABLE_ENTITY  <br>•‎ \"name\": \"Убедитесь, что это значение не содержит не более 80 символов  <br>•‎ \"price\": \"Введите правильное число\"  <br>\"name\", \"description\", \"price\": \"Обязательное поле\"  <br>HTTP_401_UNAUTHORIZED  <br>•‎ \"detail\": \"Недопустимый токен\" |\n| PATCH | •‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }}  <br>(Optional) | HTTP_200_OK  <br>•‎ {{ Product.id }}  <br>•‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }}  <br>HTTP_422_UNPROCESSABLE_ENTITY  <br>•‎ \"name\": \"Убедитесь, что это значение не содержит не более 80 символов  <br>•‎ \"price\": \"Введите правильное число\"  <br>\"name\", \"description\", \"price\": \"Обязательное поле\"  <br>HTTP_401_UNAUTHORIZED  <br>•‎ \"detail\": \"Недопустимый токен\" |\n| DELETE | \\- | HTTP_200_OK  <br>•‎ \"message\" : \"Product removed\"  <br>HTTP_404_NOT_FOUND |\n\n### Пояснение:\n\n#### Получение списка товаров (GET):\n\nПри вводе соответствующего адреса с использованием метода GET мы можем получить информацию о текущих товарах:\n\n``` json\n[\n    {\n        \"id\": 1,\n        \"name\": \"Product1\",\n        \"description\": \"ProductDesc1\",\n        \"price\": 125\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Product2\",\n        \"description\": \"ProductDesc2\",\n        \"price\": 150\n    },\n\n ```\n\n#### Создание товара (POST):\n\nВводя нужные поля для заполнения (название, описание и цена товара) мы можем добавить новый товар. В итоге нам вернет идентификатор добавленного товара и соответствующее сообщение:\n\n``` json\n{\n    \"id\": 1,\n    \"message\": \"Product added\"\n}\n\n ```\n\nПри добавлении товара также могут возникнуть ошибки валидации, когда администратор попытается ввести некорректное значение поля price, или же превысит длину поля названия товара. Не стоит также про включение полей:\n\n``` json\n{\n    \"name\": [\n        \"Убедитесь, что это значение содержит не более 80 символов.\"\n    ],\n    \"description\": [\n        \"Обязательное поле.\"\n    ],\n    \"price\": [\n        \"Введите правильное число.\"\n    ]\n}\n\n ```\n\n#### Редактирование товара (PATCH):\n\nС помощью метода PATCH администратор может изменить какие-либо данные о товаре (название, описание, цену). При изменении будет возвращена информация о только что отредактированном товаре:\n\n``` json\n{\n    \"id\": 1,\n    \"name\": \"Product1Updated\",\n    \"description\": \"ProductDesc1\",\n    \"price\": 200\n}\n\n ```\n\nПримечание: для редактирования товара также применяются методы валидации, что и при добавлении товара\n\n#### Удаление товара (DELETE):\n\nАдминистратор может удалять существующие товары с помощью метода DELETE. После успешного удаления будет выведено соответствующее сообщение:\n\n``` json\n{\n    \"message\": \"Proudct removed\"\n}\n\n ```\n\nЕсли же администратор укажет идентификатор несуществующего товара, ему вернет следующее:\n\n``` json\n{\n    \"detail\": \"Страница не найдена.\"\n}\n\n ```\n\n## Logout:\n\nСтандартный URL для выхода: logout/\n\n| **Метод** | **Запрос** | Ответ |\n| --- | --- | --- |\n| GET | \\- | HTTP_200_OK  <br>•‎ \"message\" : \"logout\"  <br>HTTP_401_UNAUTHORIZED  <br>•‎ \"detail\" : \"Недопустимый токен\" |\n\n#### Выход администратора (GET):\n\nПосле перехода по адресу будет произведен выход администоратора и сброс его токена-аутентификации.\n\n``` json\n{\n    \"message\": \"logout\"\n}\n\n ```\n\n### Примечание:\n\nПри попытке использования функций администратора без использования соответствующего токена будет выведена ошибка о неподходящем токене:\n\n``` json\n{\n    \"detail\": \"Недопустимый токен.\"\n}\n\n ```"
+		},
+		{
+			"name": "Функционал гостя",
+			"item": [
+				{
+					"name": "Создание пользователя",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "UserExample",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "UserExample@mail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "124701mcxx",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/register/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"register",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Логин пользователя и присвоение токена",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "Pack23",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "124701mcxx",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/auth/token/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Просмотр списка товаров",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/product",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Гость - пользователь, который впервые зашел на сайт и не зарегистрировался/залогинился. Ему доступны следующие функции\n\n- Регистрация пользователя\n- Логин(аутентификация) пользователя\n- Просмотр списка товаров\n    \n\n# Включает в себя следующие эндпоинты:\n\n## Signup (Регистрация пользователя):\n\nURL: signup/\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| POST | •‎ {{ Client.username }}  <br>•‎ {{ Client.email }}  <br>•‎ {{ Client.fio }}  <br>•‎ {{ Client.password }} | HTTP_201_CREATED  <br>•‎ {{ Client.token }}  <br>HTTP_422_UNPROCESSABLE_ENTITY  <br>• \"email\", \"username\" - пользователь с таким email, username уже существует  <br>• \"username\", \"email\", \"fio\", \"password\" - Обязательное поле  <br>• \"username\", \"fio\", \"email\", \"password\" - не может быть пустым  <br>• \"email\" - Введите правильный адрес электронной почты, ошибка валидации почты  <br>• \"password\" - Введённый пароль слишком короткий. Он должен содержать как минимум 6 символов, Введённый пароль состоит только из цифр. |\n\n### Пояснения:\n\n#### Регистрация пользователя (POST):\n\nЧтобы зарегистрировать нового пользователя, гость должен ввести все нужные для этого данные (username, email, fio, password). При успешном регистрации он получит присвоенный ему токен для аутентификации и использования функционала клиента.\n\n``` json\n{\n    \"token\": \"c71a66d02568875fb2165c29c13b9f69bb06d68c\"\n}\n\n ```\n\nВажно упомянуть ошибки, которые могут возникнуть при регистрации пользователя, а именно:\n\n##### Пользователь с таким {{ client.username }} or {{f client.email }} уже существует:\n\nДанная ошибка возникает тогда, когда пользователь с такими данными уже существует. Работает это как совместно, так и отдельно (У пользователя должен быть уникальный username и email для регистрации). Чуть ниже я предоставил указание уже существующего как email, так и username:\n\n``` json\n{\n    \"email\": [\n        \"пользователь с таким email уже существует.\"\n    ],\n    \"username\": [\n        \"пользователь с таким username уже существует.\"\n    ]\n}\n\n ```\n\n##### {{ Client.email }}, {{ Client.username }}, {{ Client.fio }}, {{ Client.password }} - обязательное поле\n\nДанная ошибка возникает, когда не было включено какое-то из полей (или сразу вместе):\n\n``` json\n{\n    \"email\": [\n        \"Обязательное поле.\"\n    ],\n    \"fio\": [\n        \"Обязательное поле.\"\n    ],\n    \"password\": [\n        \"Обязательное поле.\"\n    ],\n    \"username\": [\n        \"Обязательное поле.\"\n    ]\n}\n\n ```\n\n##### {{ Client.email }}, {{ Client.username }}, {{ Client.fio }}, {{ Client.password }} - не может быть пустым\n\nДанная ошибка возникает, когда данные поля включены, но пользователь в них ничего не ввел (или хотя бы в одно из них):\n\n``` json\n{\n    \"email\": [\n        \"Это поле не может быть пустым.\"\n    ],\n    \"fio\": [\n        \"Это поле не может быть пустым.\"\n    ],\n    \"password\": [\n        \"Это поле не может быть пустым.\"\n    ],\n    \"username\": [\n        \"Это поле не может быть пустым.\"\n    ]\n}\n\n ```\n\n#### Ошибки валидации:\n\n##### {{ Client.email }} - введите правильный адрес электронной почты, ошибка валидации почты\n\nДанная ошибка возникает, когда пользователь пытается зарегистрироваться с \"невалидной\" почтой (валидатор проверяет правильность ввода почтового адреса):\n\n``` json\n{\n    \"email\": [\n        \"Ошибка валидации почты\",\n        \"Введите правильный адрес электронной почты.\"\n    ],\n\n ```\n\n##### {{ Client.password }} - Введенный пароль слишком короткий. Введенный пароль состоит только из цифр/букв. Введенный пароль широко распространен.\n\nОшибка возникает, когда пользователь вводит пароль меньше заданной валидатором длины (в нашем случае < 6), а также если его пароль состоит только из цифр/букв. Валидатор также проверяет пароль на распространенность (что не позволяет пользователю вводить пароли типа 123456 или qwerty):\n\n``` json\n{\n    \"password\": [\n        \"Введённый пароль слишком короткий. Он должен содержать как минимум 6 символов.\",\n        \"Введённый пароль слишком широко распространён.\",\n        \"Введённый пароль состоит только из цифр.\"\n    ]\n}\n\n ```\n\n## Login (аутентификация пользователя):\n\nURL: login/\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| POST | {{ Client.email }}  <br>{{ Client.password }} | HTTP_200_OK  <br>•‎ {{ Client.token }}  <br>HTTP_401_UNAUTHORIZED  <br>• \"email\", \"password\" - Обязательное поле  <br>• \"email\", \"password\" - не может быть пустым  <br>• \"email\" - Введите правильный адрес электронной почты, ошибка валидации почты  <br>• \"email\" - \"Email or password is incorrect.\" - в случае неверного ввода почты или пароля |\n\n### Пояснения\n\n#### Аутентификация пользователя (POST):\n\nДля успешной аутентификации пользователя ему требуется ввести свой email и пароль при регистрации. После этого пользователю будет возвращен сгенерированный для него токен.\n\n``` json\n{\n    \"auth_token\": \"b0988483d060ea519a91b4b5eae7cb724f71e9fe\"\n}\n\n ```\n\nК ошибкам валидации, которые можно посмотреть выше добавляется новая - когда пользователь вводит неверную почту или пароль. Реализация здесь была доведена не до конца - система не может сказать пользователю конкретно, что он ввел не так - пароль или почту.\n\n``` json\n{\n    \"email\": [\n        \"Email or password is incorrect.\"\n    ]\n}\n\n ```\n\n## Просмотр списка товаров\n\nURL: product/\n\n| Метод | Запрос | Ответ |\n| --- | --- | --- |\n| GET | \\- | HTTP_200_OK  <br>•‎ {{ Product.id }}  <br>•‎ {{ Product.name }}  <br>•‎ {{ Product.description }}  <br>•‎ {{ Product.price }} |\n\n### Пояснения\n\nПо аналогии с администратором и клиентом, пользователю вернется список существующих на данный момент товаров.\n\nПри вводе соответствующего адреса с использованием метода GET мы можем получить информацию о текущих товарах:\n\n``` json\n[\n    {\n        \"id\": 1,\n        \"name\": \"Product1\",\n        \"description\": \"ProductDesc1\",\n        \"price\": 125\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Product2\",\n        \"description\": \"ProductDesc2\",\n        \"price\": 150\n    },\n\n ```"
+		}
+	]
+}
